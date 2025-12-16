@@ -1,0 +1,61 @@
+name: "Add warm-up problem"
+description: "Submit a new practice problem."
+title: "[Problem] "
+labels: ["problem"]
+body:
+  - type: input
+    id: title
+    attributes:
+      label: Problem title
+      placeholder: "e.g., Reverse a string"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - Python
+        - JavaScript
+        - TypeScript
+        - Rust
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Problem statement
+      description: "Clear instructions, inputs/outputs, constraints."
+      placeholder: "Write a function that..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples
+      placeholder: |
+        Input: ...
+        Output: ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution_notes
+    attributes:
+      label: Solution notes (optional)
+      description: "Approach hints, edge cases, time/space complexity."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I included at least 1 example
+          required: true
+        - label: The problem is solvable without external libraries
+          required: true
