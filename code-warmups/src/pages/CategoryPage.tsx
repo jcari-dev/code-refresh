@@ -2,9 +2,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { challenges } from "../challenges";
 
 const labelMap: Record<string, string> = {
-  "strings": "Strings",
-  "lists": "Lists",
-  "math": "Math",
+  strings: "Strings",
+  lists: "Lists",
+  math: "Math",
   "code-reading": "Code Reading",
 };
 
@@ -12,7 +12,7 @@ export default function CategoryPage() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
 
-  const list = challenges.filter(c => c.category === categoryId);
+  const list = challenges.filter((c) => c.category === categoryId);
 
   if (!categoryId) {
     return <div>Missing category.</div>;
@@ -30,10 +30,7 @@ export default function CategoryPage() {
           </p>
         </div>
 
-        <Link
-          to="/"
-          className="text-xs text-slate-400 hover:text-emerald-300"
-        >
+        <Link to="/" className="text-xs text-slate-400 hover:text-emerald-300">
           ← Back to overview
         </Link>
       </div>
@@ -45,19 +42,18 @@ export default function CategoryPage() {
               <th className="px-4 py-2 text-left font-medium">Challenge</th>
               <th className="px-4 py-2 text-left font-medium">Est. time</th>
               <th className="px-4 py-2 text-left font-medium">Type</th>
+              <th className="px-4 py-2 text-left font-medium">Completed</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800">
-            {list.map(ch => (
+            {list.map((ch) => (
               <tr
                 key={ch.id}
                 className="hover:bg-slate-800/70 cursor-pointer"
                 onClick={() => navigate(`/challenge/${ch.id}`)}
               >
                 <td className="px-4 py-3">
-                  <div className="font-semibold text-slate-50">
-                    {ch.title}
-                  </div>
+                  <div className="font-semibold text-slate-50">{ch.title}</div>
                   <div className="text-xs text-slate-400 line-clamp-1">
                     {ch.description}
                   </div>
@@ -68,6 +64,28 @@ export default function CategoryPage() {
                 <td className="px-4 py-3">
                   <span className="inline-flex items-center rounded-full bg-slate-800 px-2 py-0.5 text-[10px] uppercase tracking-wide text-slate-300">
                     warmup
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-xs font-medium tracking-wide">
+                  <span
+                    className={
+                      localStorage.getItem(`${ch.id}:python:completed`) ===
+                      "true"
+                        ? "text-emerald-400"
+                        : "text-slate-500"
+                    }
+                  >
+                    PY
+                  </span>
+                  <span className="mx-1 text-slate-600">/</span>
+                  <span
+                    className={
+                      localStorage.getItem(`${ch.id}:js:completed`) === "true"
+                        ? "text-emerald-400"
+                        : "text-slate-500"
+                    }
+                  >
+                    JS
                   </span>
                 </td>
               </tr>

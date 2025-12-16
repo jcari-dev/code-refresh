@@ -3,18 +3,56 @@ import confetti from "canvas-confetti";
 import { Challenge, LanguageConfig, LanguageId } from "../types";
 import { runPythonChallenge } from "../pyRunner";
 import { runJsChallenge } from "../jsRunner";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 interface Props {
   challenge: Challenge;
 }
 
+/** ---------- Submissions storage helpers ---------- */
+type Submission = {
+  ts: number; // Date.now()
+  lang: LanguageId;
+  passed: number | null;
+  total: number | null;
+  ok: boolean | null; // true if all passed, false if not, null if unknown
+  output: string; // full test output (optionally capped)
+  code: string; // code used at submission time (optionally capped)
+};
 
+function submissionsKey(challengeId: string) {
+  return `${challengeId}:submissions`;
+}
+
+function readSubmissions(challengeId: string): Submission[] {
+  try {
+    const raw = localStorage.getItem(submissionsKey(challengeId));
+    const arr = raw ? (JSON.parse(raw) as Submission[]) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeSubmissions(challengeId: string, subs: Submission[]) {
+  localStorage.setItem(submissionsKey(challengeId), JSON.stringify(subs));
+}
+
+function appendSubmission(challengeId: string, entry: Submission, cap = 20) {
+  const prev = readSubmissions(challengeId);
+  const next = [entry, ...prev].slice(0, cap);
+  writeSubmissions(challengeId, next);
+  return next;
+}
+/** ----------------------------------------------- */
 
 export default function ChallengeEditor({ challenge }: Props) {
   // ---- Safe languages array with fallback ----
   const languages: LanguageConfig[] = useMemo(() => {
-    if (Array.isArray((challenge as any).languages) && (challenge as any).languages.length > 0) {
+    if (
+      Array.isArray((challenge as any).languages) &&
+      (challenge as any).languages.length > 0
+    ) {
       return (challenge as any).languages;
     }
 
@@ -33,7 +71,6 @@ export default function ChallengeEditor({ challenge }: Props) {
     ];
   }, [challenge]);
 
-  // If somehow still empty, show a friendly error.
   if (!languages.length) {
     return (
       <div className="text-sm text-red-300 bg-slate-900 border border-red-500/50 rounded p-3">
@@ -47,7 +84,7 @@ export default function ChallengeEditor({ challenge }: Props) {
   );
 
   const activeLang: LanguageConfig = useMemo(
-    () => languages.find(l => l.id === activeLangId) ?? languages[0],
+    () => languages.find((l) => l.id === activeLangId) ?? languages[0],
     [languages, activeLangId]
   );
 
@@ -55,22 +92,48 @@ export default function ChallengeEditor({ challenge }: Props) {
   const [output, setOutput] = useState("Run the tests!");
   const [isRunning, setIsRunning] = useState(false);
 
+  // Submissions for this challenge
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [expandedIdx, setExpandedIdx] = useState<number | null>(0);
+
+  useEffect(() => {
+    setSubmissions(readSubmissions(challenge.id));
+    setExpandedIdx(0);
+  }, [challenge.id]);
+
+  useEffect(() => {
+    const lingeringCode = localStorage.getItem(
+      challenge.id + ":" + activeLangId
+    );
+    if (lingeringCode) setCode(lingeringCode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (code === activeLang.starterCode) return;
+    localStorage.setItem(challenge.id + ":" + activeLangId, code);
+  }, [code, challenge.id, activeLangId, activeLang.starterCode]);
+
   function handleLangChange(id: LanguageId) {
     setActiveLangId(id);
-    const lang = languages.find(l => l.id === id);
+    const lang = languages.find((l) => l.id === id);
     if (lang) {
-      setCode(lang.starterCode);
+      const lingeringCode = localStorage.getItem(challenge.id + ":" + id);
+      setCode(lingeringCode ? lingeringCode : lang.starterCode);
       setOutput("Run the tests!");
     }
   }
 
   function handleResetCode() {
-    
-    if(!confirm("This will replace all code in the code editor, to the default provided code. Confirm??")){
-    setCode(activeLang.starterCode);
-    setOutput("Run the tests!")
+    if (
+      confirm(
+        "This will replace all code in the code editor, to the default provided code. Are you sure?"
+      )
+    ) {
+      localStorage.removeItem(challenge.id + ":" + activeLangId);
+      setCode(activeLang.starterCode);
+      setOutput("Run the tests!");
     }
-
   }
 
   async function handleRun() {
@@ -89,22 +152,46 @@ export default function ChallengeEditor({ challenge }: Props) {
       setOutput(result);
 
       const match = /Passed\s+(\d+)\/(\d+)\s+tests/.exec(result);
-      if (match) {
-        const passed = Number(match[1]);
-        const total = Number(match[2]);
-        if (passed === total && total > 0) {
-          confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-          });
-        }
+      const passed = match ? Number(match[1]) : null;
+      const total = match ? Number(match[2]) : null;
+      const ok = match ? passed === total && total > 0 : null;
+
+      if (ok) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        localStorage.setItem(
+          challenge.id + ":" + activeLangId + ":completed",
+          "true"
+        );
       }
 
-      
+      const entry: Submission = {
+        ts: Date.now(),
+        lang: activeLangId,
+        passed,
+        total,
+        ok,
+        output: result.slice(0, 8000),
+        code: code.slice(0, 8000),
+      };
 
+      setSubmissions(appendSubmission(challenge.id, entry));
+      setExpandedIdx(0); // expand newest
     } catch (err) {
-      setOutput("Runtime error:\n" + String(err));
+      const msg = "Runtime error:\n" + String(err);
+      setOutput(msg);
+
+      const entry: Submission = {
+        ts: Date.now(),
+        lang: activeLangId,
+        passed: null,
+        total: null,
+        ok: false,
+        output: msg.slice(0, 8000),
+        code: code.slice(0, 8000),
+      };
+
+      setSubmissions(appendSubmission(challenge.id, entry));
+      setExpandedIdx(0); // expand newest
     } finally {
       setIsRunning(false);
     }
@@ -118,7 +205,7 @@ export default function ChallengeEditor({ challenge }: Props) {
       {/* Language toggle */}
       {languages.length > 1 && (
         <div className="flex gap-2 text-xs mb-1">
-          {languages.map(lang => (
+          {languages.map((lang) => (
             <button
               key={lang.id}
               onClick={() => handleLangChange(lang.id as LanguageId)}
@@ -132,14 +219,14 @@ export default function ChallengeEditor({ challenge }: Props) {
               {lang.id === "python" ? "Python" : "JavaScript"}
             </button>
           ))}
-                      <button
-              key={"default-code"}
-              onClick={handleResetCode}
-              className="ml-auto px-2.5 py-1 rounded-full border bg-emerald-500 text-slate-900 border-emerald-400"
-            >
-              Reset to starter code
-              {/* {lang.id === "python" ? "Python" : "JavaScript"} */}
-            </button>
+
+          <button
+            key={"default-code"}
+            onClick={handleResetCode}
+            className="ml-auto px-2.5 py-1 rounded-full border bg-emerald-500 text-slate-900 border-emerald-400"
+          >
+            Reset to starter code
+          </button>
         </div>
       )}
 
@@ -149,7 +236,7 @@ export default function ChallengeEditor({ challenge }: Props) {
           language={monacoLanguage}
           theme="vs-dark"
           value={code}
-          onChange={v => setCode(v ?? "")}
+          onChange={(v) => setCode(v ?? "")}
           options={{
             minimap: { enabled: false },
             fontSize: 14,
@@ -168,13 +255,128 @@ export default function ChallengeEditor({ challenge }: Props) {
         </button>
 
         <div className="text-[11px] text-slate-400">
-          Runtime: {activeLang.id === "python" ? "Pyodide (Python 3.11.3)" : "Browser JS"}
+          Runtime:{" "}
+          {activeLang.id === "python"
+            ? "Pyodide (Python 3.11.3)"
+            : "Browser JS"}
         </div>
       </div>
 
       <pre className="bg-slate-900 border border-slate-700 text-slate-200 p-3 rounded min-h-[120px] whitespace-pre-wrap text-sm overflow-auto">
         {output}
       </pre>
+
+      {/* Submissions (expandable) */}
+      {submissions.length > 0 && (
+        <div className="border border-slate-800 rounded-lg overflow-hidden">
+          <div className="flex items-center justify-between px-3 py-2 bg-slate-900/60 border-b border-slate-800">
+            <div className="text-xs font-semibold text-slate-200">
+              Submissions
+            </div>
+            <button
+              className="text-[11px] text-slate-400 hover:text-slate-200"
+              onClick={() => {
+                localStorage.removeItem(submissionsKey(challenge.id));
+                setSubmissions([]);
+                setExpandedIdx(null);
+              }}
+            >
+              Clear
+            </button>
+          </div>
+
+          <div className="max-h-[260px] overflow-auto divide-y divide-slate-800">
+            {submissions.map((s, i) => {
+              const isOpen = expandedIdx === i;
+              const score =
+                s.passed != null && s.total != null
+                  ? `${s.passed}/${s.total}`
+                  : "—";
+              const langLabel = s.lang === "python" ? "PY" : "JS";
+
+              return (
+                <div key={s.ts + ":" + i} className="text-xs">
+                  <button
+                    className="w-full text-left px-3 py-2 hover:bg-slate-900/40"
+                    onClick={() => setExpandedIdx(isOpen ? null : i)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-slate-300">
+                        <span className="text-slate-500">
+                          {new Date(s.ts).toLocaleString()}
+                        </span>
+                        <span className="text-slate-700">•</span>
+                        <span className="uppercase">{langLabel}</span>
+                        <span className="text-slate-700">•</span>
+                        <span
+                          className={
+                            s.ok ? "text-emerald-400" : "text-slate-300"
+                          }
+                        >
+                          {score}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={
+                            s.ok ? "text-emerald-400" : "text-slate-500"
+                          }
+                        >
+                          {s.ok ? "PASS" : "—"}
+                        </span>
+                        <span className="text-slate-500">
+                          {isOpen ? "▾" : "▸"}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-3 pb-3">
+                      <div className="grid grid-cols-1 gap-2">
+                        <div className="flex items-center justify-between">
+                          <div className="text-[11px] text-slate-500">
+                            Output
+                          </div>
+                          <button
+                            className="text-[11px] text-slate-400 hover:text-slate-200"
+                            onClick={() =>
+                              navigator.clipboard.writeText(s.output)
+                            }
+                          >
+                            Copy output
+                          </button>
+                        </div>
+
+                        <pre className="bg-slate-950/50 border border-slate-800 rounded p-2 max-h-[140px] overflow-auto whitespace-pre-wrap text-slate-200">
+                          {s.output}
+                        </pre>
+
+                        <div className="flex items-center justify-between">
+                          <div className="text-[11px] text-slate-500">Code</div>
+                          <button
+                            className="text-[11px] text-slate-400 hover:text-slate-200"
+                            onClick={() =>
+                              navigator.clipboard.writeText(s.code)
+                            }
+                          >
+                            Copy code
+                          </button>
+                        </div>
+
+                        <pre className="bg-slate-950/50 border border-slate-800 rounded p-2 max-h-[180px] overflow-auto whitespace-pre text-slate-200">
+                          {s.code}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
