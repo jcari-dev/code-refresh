@@ -72,4 +72,39 @@ export const mathChallenges: Challenge[] = [
       { input: [273], expected: 16.52 },
     ],
   },
+  {
+    id: "return-absolute-value-of-list-sum",
+    title: "Return Absolute Value of List Sum",
+    category: "math",
+    description:
+      "Return the absolute value of the sum of all numbers in the list.",
+    paramNames: ["nums"],
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "absolute_value_of_list_sum",
+        starterCode: `def absolute_value_of_list_sum(nums: list[int]) -> int:
+    # TODO: implement
+    return 0
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "absoluteValueOfListSum",
+        starterCode: `function absoluteValueOfListSum(nums) {
+  // TODO: implement
+  return 0;
+}
+`,
+      },
+    ],
+    tests: [
+      { input: [[1, -2, 3]], expected: 2 },
+      { input: [[-5, -5]], expected: 10 },
+      { input: [[10, -3, -4]], expected: 3 },
+      { input: [[0, 0, 0]], expected: 0 },
+      { input: [[7]], expected: 7 },
+    ],
+  }
+
 ];
