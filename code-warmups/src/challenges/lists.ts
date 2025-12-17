@@ -57,7 +57,7 @@ export const listsChallenges: Challenge[] = [
         requiredFunction: "returnLastElement",
         starterCode: `function returnLastElement(nums) {
   // TODO: implement
-  return null;
+  return [];
 }
 `,
       },
