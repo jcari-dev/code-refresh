@@ -109,7 +109,7 @@ export default function Why() {
           </ul>
         </section>
 
-        <section className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
+        <section className="rounded-xl bg-slate-900 border border-slate-700 p-4">
           <p className="text-slate-300">
             You don’t need to do everything today. Just a little code is still
             code.

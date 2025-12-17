@@ -29,16 +29,16 @@ export const stringsChallenges: Challenge[] = [
       },
     ],
     tests: [
-      { input: ["aaaa"],       expected: "Aaaa" },
-      { input: ["hello"],      expected: "Hello" },
-      { input: ["x"],          expected: "X" },
-      { input: [""],           expected: "" },
+      { input: ["aaaa"], expected: "Aaaa" },
+      { input: ["hello"], expected: "Hello" },
+      { input: ["x"], expected: "X" },
+      { input: [""], expected: "" },
       { input: ["maccha latte"], expected: "Maccha Latte" },
     ],
     timeLimitSeconds: 300,
   },
   // other challenges...
-    {
+  {
     id: "remove-all-digits",
     title: "Remove All Digits",
     category: "strings",
@@ -66,10 +66,10 @@ export const stringsChallenges: Challenge[] = [
       },
     ],
     tests: [
-      { input: ["aaaa"],       expected: "aaaa" },
-      { input: ["a1b2c3"],      expected: "abc" },
-      { input: ["a 8"],          expected: "a " },
-      { input: [""],           expected: "" },
+      { input: ["aaaa"], expected: "aaaa" },
+      { input: ["a1b2c3"], expected: "abc" },
+      { input: ["a 8"], expected: "a " },
+      { input: [""], expected: "" },
       { input: ["123"], expected: "" },
     ],
     timeLimitSeconds: 300,

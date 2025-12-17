@@ -56,7 +56,7 @@ export default function Sidebar() {
           >
             <span>{labelMap[cat as string] ?? cat}</span>
             <span className="text-[10px] text-slate-400">
-              {counts[cat as string] ?? 0} tasks
+              {counts[cat as string] ?? 0} warmups
             </span>
           </NavLink>
         ))}
