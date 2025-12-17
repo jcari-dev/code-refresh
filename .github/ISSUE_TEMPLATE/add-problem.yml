@@ -1,22 +1,34 @@
-name: "Add warm-up problem"
-description: "Submit a new practice problem."
-title: "[Problem] "
-labels: ["problem"]
+name: "Add warm-up"
+description: "Submit a new warm-up."
+title: "[Warmup] "
+labels: ["warmup"]
 body:
-  - type: input
-    id: title
+  - type: dropdown
+    id: category
     attributes:
-      label: Problem title
-      placeholder: "e.g., Reverse a string"
+      label: Category
+      description: "Choose one."
+      options:
+        - strings
+        - math
+        - lists-arrays
+        - dicts-maps
+        - code-reading
     validations:
       required: true
 
-  - type: dropdown
-    id: language
+  - type: textarea
+    id: prompt
     attributes:
-      label: Language
-      options:
-        - Python
-        - JavaScript
+      label: Prompt
+      description: "What should the user build/return? Keep it short."
+      placeholder: "Write a function that..."
     validations:
       required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes (optional)
+      description: "Edge cases, constraints, or hints."
+      required: false
