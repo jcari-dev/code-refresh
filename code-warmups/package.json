@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "deploy": "npm run build && gh-pages -d dist",
+    "deploy": "npm run build && gh-pages -d dist --cname coderefresh.dev",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -28,13 +28,12 @@ function summarizeOnly(raw: string) {
   const total = match ? Number(match[2]) : null;
   const ok = match ? passed === total && (total ?? 0) > 0 : null;
 
-
   const safe =
     passed == null || total == null
       ? "Ran tests.\n"
       : ok
-        ? `Passed ${passed}/${total} tests\n`
-        : `Passed ${passed}/${total} tests\n\nNot quite — try again.\n`;
+      ? `Passed ${passed}/${total} tests\n`
+      : `Passed ${passed}/${total} tests\n\nNot quite — try again.\n`;
 
   return { safe, passed, total, ok };
 }
@@ -56,8 +55,6 @@ function stripSpoilerLines(text: string) {
     .join("\n")
     .trim();
 }
-
-
 
 function submissionsKey(challengeId: string) {
   return `${challengeId}:submissions`;
@@ -85,7 +82,10 @@ function appendSubmission(challengeId: string, entry: Submission, cap = 20) {
 }
 /** ----------------------------------------------- */
 
-export default function ChallengeEditor({ challenge, isCodeReading = false }: Props) {
+export default function ChallengeEditor({
+  challenge,
+  isCodeReading = false,
+}: Props) {
   // ---- Safe languages array with fallback ----
   const languages: LanguageConfig[] = useMemo(() => {
     if (
@@ -142,14 +142,14 @@ export default function ChallengeEditor({ challenge, isCodeReading = false }: Pr
   }, [challenge.id]);
 
   useEffect(() => {
-    const lingeringCode = localStorage.getItem(challenge.id + ":" + activeLangId);
-    if (lingeringCode) setCode(lingeringCode);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const key = `${challenge.id}:${activeLangId}`;
+    const lingering = localStorage.getItem(key);
+    setCode(lingering ?? activeLang.starterCode);
+  }, [challenge.id, activeLangId, activeLang.starterCode]);
 
   useEffect(() => {
-    if (code === activeLang.starterCode) return;
-    localStorage.setItem(challenge.id + ":" + activeLangId, code);
+    const key = `${challenge.id}:${activeLangId}`;
+    localStorage.setItem(key, code);
   }, [code, challenge.id, activeLangId, activeLang.starterCode]);
 
   function handleLangChange(id: LanguageId) {
@@ -176,86 +176,88 @@ export default function ChallengeEditor({ challenge, isCodeReading = false }: Pr
     }
   }
 
-async function handleRun() {
-  setIsRunning(true);
-  setOutput("Running tests...");
-  setConsoleOut("");
-
-  try {
-    const run =
-      activeLang.id === "python"
-        ? await runPythonChallenge(challenge, activeLang, code)
-        : await runJsChallenge(challenge, activeLang, code);
-
-    // default values
-    let shownOutput = run.result;
-    let shownConsole = run.console || "";
-
-    let passed: number | null = null;
-    let total: number | null = null;
-    let ok: boolean | null = null;
-
-    if (isCodeReading) {
-      // Only show summary to avoid spoilers (expected/got)
-      const s = summarizeOnly(run.result);
-      shownOutput = s.safe;
-      passed = s.passed;
-      total = s.total;
-      ok = s.ok;
-
-      // Defensive: if anything spoiler-ish leaks into console, remove it
-      shownConsole = stripSpoilerLines(shownConsole);
-    } else {
-      const match = /Passed\s+(\d+)\/(\d+)\s+tests/.exec(run.result);
-      passed = match ? Number(match[1]) : null;
-      total = match ? Number(match[2]) : null;
-      ok = match ? passed === total && (total ?? 0) > 0 : null;
-
-    }
-
-    setOutput(shownOutput);
-    setConsoleOut(shownConsole);
-
-    if (ok) {
-      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-      localStorage.setItem(challenge.id + ":" + activeLangId + ":completed", "true");
-    }
-
-    const entry: Submission = {
-      ts: Date.now(),
-      lang: activeLangId,
-      passed,
-      total,
-      ok,
-      output: shownOutput.slice(0, 8000),
-      console: shownConsole.slice(0, 8000),
-      code: code.slice(0, 8000),
-    };
-
-    setSubmissions(appendSubmission(challenge.id, entry));
-    setExpandedIdx(0);
-  } catch (err) {
-    const msg = "Runtime error:\n" + String(err);
-    setOutput(msg);
+  async function handleRun() {
+    setIsRunning(true);
+    setOutput("Running tests...");
     setConsoleOut("");
 
-    const entry: Submission = {
-      ts: Date.now(),
-      lang: activeLangId,
-      passed: null,
-      total: null,
-      ok: false,
-      output: msg.slice(0, 8000),
-      console: "",
-      code: code.slice(0, 8000),
-    };
+    try {
+      const run =
+        activeLang.id === "python"
+          ? await runPythonChallenge(challenge, activeLang, code)
+          : await runJsChallenge(challenge, activeLang, code);
 
-    setSubmissions(appendSubmission(challenge.id, entry));
-    setExpandedIdx(0);
-  } finally {
-    setIsRunning(false);
+      // default values
+      let shownOutput = run.result;
+      let shownConsole = run.console || "";
+
+      let passed: number | null = null;
+      let total: number | null = null;
+      let ok: boolean | null = null;
+
+      if (isCodeReading) {
+        // Only show summary to avoid spoilers (expected/got)
+        const s = summarizeOnly(run.result);
+        shownOutput = s.safe;
+        passed = s.passed;
+        total = s.total;
+        ok = s.ok;
+
+        // Defensive: if anything spoiler-ish leaks into console, remove it
+        shownConsole = stripSpoilerLines(shownConsole);
+      } else {
+        const match = /Passed\s+(\d+)\/(\d+)\s+tests/.exec(run.result);
+        passed = match ? Number(match[1]) : null;
+        total = match ? Number(match[2]) : null;
+        ok = match ? passed === total && (total ?? 0) > 0 : null;
+      }
+
+      setOutput(shownOutput);
+      setConsoleOut(shownConsole);
+
+      if (ok) {
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        localStorage.setItem(
+          challenge.id + ":" + activeLangId + ":completed",
+          "true"
+        );
+      }
+
+      const entry: Submission = {
+        ts: Date.now(),
+        lang: activeLangId,
+        passed,
+        total,
+        ok,
+        output: shownOutput.slice(0, 8000),
+        console: shownConsole.slice(0, 8000),
+        code: code.slice(0, 8000),
+      };
+
+      setSubmissions(appendSubmission(challenge.id, entry));
+      setExpandedIdx(0);
+    } catch (err) {
+      const msg = "Runtime error:\n" + String(err);
+      setOutput(msg);
+      setConsoleOut("");
+
+      const entry: Submission = {
+        ts: Date.now(),
+        lang: activeLangId,
+        passed: null,
+        total: null,
+        ok: false,
+        output: msg.slice(0, 8000),
+        console: "",
+        code: code.slice(0, 8000),
+      };
+
+      setSubmissions(appendSubmission(challenge.id, entry));
+      setExpandedIdx(0);
+    } finally {
+      setIsRunning(false);
+    }
   }
-}
 
   const monacoLanguage =
     activeLang.id === "javascript" ? "javascript" : "python";
@@ -292,7 +294,8 @@ async function handleRun() {
 
       <div className="border border-slate-800 rounded-lg overflow-hidden">
         <MonacoEditor
-        
+          key={`${challenge.id}-${activeLangId}`}
+          path={`${challenge.id}.${activeLangId}`}
           height="280px"
           language={monacoLanguage}
           theme="vs-dark"
@@ -317,7 +320,9 @@ async function handleRun() {
 
         <div className="text-[11px] text-slate-400">
           Runtime:{" "}
-          {activeLang.id === "python" ? "Pyodide (Python 3.11.3)" : "Browser JS"}
+          {activeLang.id === "python"
+            ? "Pyodide (Python 3.11.3)"
+            : "Browser JS"}
         </div>
       </div>
 
@@ -386,7 +391,9 @@ async function handleRun() {
 
                       <div className="flex items-center gap-3">
                         <span
-                          className={s.ok ? "text-emerald-400" : "text-slate-500"}
+                          className={
+                            s.ok ? "text-emerald-400" : "text-slate-500"
+                          }
                         >
                           {s.ok ? "PASS" : "—"}
                         </span>
@@ -441,7 +448,9 @@ async function handleRun() {
                           <div className="text-[11px] text-slate-500">Code</div>
                           <button
                             className="text-[11px] text-slate-400 hover:text-slate-200"
-                            onClick={() => navigator.clipboard.writeText(s.code)}
+                            onClick={() =>
+                              navigator.clipboard.writeText(s.code)
+                            }
                           >
                             Copy code
                           </button>
