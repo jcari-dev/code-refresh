@@ -2,6 +2,8 @@ name: "Add warm-up"
 description: "Submit a new warm-up."
 title: "[Warmup] "
 labels: ["warmup"]
+assignees:
+  - jcari-dev
 
 body:
   - type: dropdown
