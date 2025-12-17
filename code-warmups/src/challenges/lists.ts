@@ -5,6 +5,7 @@ export const listsChallenges: Challenge[] = [
     id: "two-sum-indices",
     title: "Two Sum Indices",
     category: "lists",
+    paramNames: ["nums", "target"],
     description:
       "Return the indices of the first pair of numbers that add up to target. If none, return [-1, -1].",
     languages: [

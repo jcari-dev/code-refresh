@@ -7,6 +7,7 @@ export const mathChallenges: Challenge[] = [
     category: "math",
     description:
       "Return the sum of all numbers from 1 to n (inclusive) that are divisible by 3 or 5.",
+      paramNames: ["n"],
     languages: [
       {
         id: "python",
