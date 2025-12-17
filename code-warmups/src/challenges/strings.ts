@@ -219,6 +219,43 @@ export const stringsChallenges: Challenge[] = [
       { input: ["Zz1"], expected: "Zz1" },
       { input: ["!@ 3-"], expected: "3" },
     ],
-  }
+  },
+{
+  id: "return-ascii-sum",
+  title: "Return ASCII Sum",
+  category: "strings",
+  description:
+    "Return the sum of the ASCII values of all characters in the string. Whitespace and control characters (like newline) count as characters.",
+  paramNames: ["string"],
+  languages: [
+    {
+      id: "python",
+      requiredFunction: "return_ascii_sum",
+      starterCode: `def return_ascii_sum(s: str) -> int:
+    if not s:
+        return 0
+    # TODO: iterate over each character (do not split)
+    return 0
+`,
+    },
+    {
+      id: "javascript",
+      requiredFunction: "returnAsciiSum",
+      starterCode: `function returnAsciiSum(s) {
+  if (!s) return 0;
+  // TODO: iterate over each character (do not split)
+  return 0;
+}
+`,
+    },
+  ],
+  tests: [
+    { input: ["a b"], expected: 227 },   // includes space (32)
+    { input: ["123"], expected: 150 },   // '1','2','3' → 49,50,51
+    { input: ["AaZ"], expected: 252 },   // mixed case
+    { input: ["!@#"], expected: 132 },   
+    { input: ["A\n"], expected: 75 },    // newline counts (10)
+  ],
+}
 
 ];
