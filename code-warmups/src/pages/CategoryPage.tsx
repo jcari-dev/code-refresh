@@ -35,7 +35,7 @@ export default function CategoryPage() {
         </Link>
       </div>
 
-      <div className="rounded-xl border border-slate-800 bg-slate-900/70 overflow-hidden shadow">
+      <div className="rounded-xl bg-slate-900 border border-slate-700 overflow-hidden shadow">
         <table className="min-w-full text-sm">
           <thead className="bg-slate-900/80 text-slate-300 text-xs uppercase">
             <tr>
