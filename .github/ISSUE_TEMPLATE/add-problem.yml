@@ -2,6 +2,7 @@ name: "Add warm-up"
 description: "Submit a new warm-up."
 title: "[Warmup] "
 labels: ["warmup"]
+
 body:
   - type: dropdown
     id: category
@@ -21,14 +22,7 @@ body:
     id: prompt
     attributes:
       label: Prompt
-      description: "What should the user build/return? Keep it short."
+      description: "Describe the warm-up."
       placeholder: "Write a function that..."
     validations:
       required: true
-
-  - type: textarea
-    id: notes
-    attributes:
-      label: Notes (optional)
-      description: "Edge cases, constraints, or hints."
-      required: false
