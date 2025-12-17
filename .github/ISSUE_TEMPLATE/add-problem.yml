@@ -1,0 +1,30 @@
+name: "Add warm-up"
+description: "Submit a new warm-up."
+title: "[Warmup] "
+labels: ["warmup"]
+assignees:
+  - jcari-dev
+
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: "Choose one."
+      options:
+        - strings
+        - math
+        - lists-arrays
+        - dicts-maps
+        - code-reading
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Prompt
+      description: "Describe the warm-up."
+      placeholder: "Write a function that..."
+    validations:
+      required: true
