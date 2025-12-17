@@ -77,4 +77,42 @@ export const stringsChallenges: Challenge[] = [
     timeLimitSeconds: 300,
   },
   // other challenges...
+  {
+    id: "remove-all-whitespace",
+    title: "Remove All Whitespace",
+    category: "strings",
+    description: "Return the string without any whitespace characters.",
+    paramNames: ["string"],
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "remove_all_whitespace",
+        starterCode: `def remove_all_whitespace(s: str) -> str:
+    if not s:
+        return s
+    # TODO: implement
+    return s
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "removeAllWhitespace",
+        starterCode: `function removeAllWhitespace(s) {
+  if (!s) return s;
+  // TODO: implement
+  return s;
+}
+`,
+      },
+    ],
+    tests: [
+      { input: ["aaaa "], expected: "aaaa" },
+      { input: [" abc"], expected: "abc" },
+      { input: ["a 8"], expected: "a8" },
+      { input: [""], expected: "" },
+      { input: [" 1 2 3 "], expected: "123" },
+    ],
+    timeLimitSeconds: 300,
+  },
+  // other challenges...
 ];
