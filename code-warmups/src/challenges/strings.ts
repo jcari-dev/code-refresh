@@ -184,4 +184,41 @@ export const stringsChallenges: Challenge[] = [
       { input: ["!@ 3-"], expected: "!@ -" },
     ],
   },
+  {
+    id: "remove-all-non-alphanumerics",
+    title: "Remove All Non-Alphanumerics",
+    category: "strings",
+    description: "Return the string containing only letters and numbers.",
+    paramNames: ["string"],
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "remove_all_non_alphanumerics",
+        starterCode: `def remove_all_non_alphanumerics(s: str) -> str:
+    if not s:
+        return s
+    # TODO: implement
+    return ""
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "removeAllNonAlphanumerics",
+        starterCode: `function removeAllNonAlphanumerics(s) {
+  if (!s) return s;
+  // TODO: implement
+  return "";
+}
+`,
+      },
+    ],
+    tests: [
+      { input: ["a-!3@"], expected: "a3" },
+      { input: ["@'3/"], expected: "3" },
+      { input: ["~!@#$%^&*()-_+"], expected: "" },
+      { input: ["Zz1"], expected: "Zz1" },
+      { input: ["!@ 3-"], expected: "3" },
+    ],
+  }
+
 ];
