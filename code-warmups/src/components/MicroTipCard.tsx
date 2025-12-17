@@ -46,7 +46,7 @@ export default function MicroTipCard() {
 
 
 
-      <p className="mt-3 text-xs text-slate-500">
+      <p className="mt-3 text-xs text-slate-400">
         Refresh to roll a new one.
       </p>
     </section>

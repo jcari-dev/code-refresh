@@ -63,7 +63,7 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer (text-only, quiet) */}
-      <div className="mt-6 text-center text-[11px] text-slate-500">
+      <div className="mt-6 text-center text-[12px] text-slate-400">
         <div className="mb-1">Built for light, focused coding.</div>
         <div className="space-x-2">
           <NavLink to="/why" className="hover:text-slate-300 transition">
@@ -78,6 +78,17 @@ export default function Sidebar() {
           >
             GitHub
           </a>
+          {(() => {
+            const d = new Date(__BUILD_TIME__);
+            const hh = String(d.getHours()).padStart(2, "0");
+            const mm = String(d.getMinutes()).padStart(2, "0");
+            return (
+              <span title="Build stamp, just for sanity checks." className="ml-2 text-[11px] tracking-widest">
+                · {hh}
+                {mm}
+              </span>
+            );
+          })()}
         </div>
       </div>
     </aside>
