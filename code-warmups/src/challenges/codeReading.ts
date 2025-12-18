@@ -36,4 +36,35 @@ return items;`,
     ],
     tests: [{ input: [], expected: [2, 3, 1] }],
   },
+  {
+    id: "cr-bool-to-int",
+    title: "Code Reading Warmup: 2",
+    category: "code-reading",
+    description: "What is the value of x?",
+    paramNames: [""],
+    codeSnippet: {
+      python: `x = [int(True), int(False)]`,
+      javascript: `const x = [Number(true), Number(false)];`,
+    },
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "solution",
+        starterCode: `def solution():
+    # TODO: return the value of x
+    return None
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "solution",
+        starterCode: `function solution() {
+  // TODO: return the value of x
+  return null;
+}
+`,
+      },
+    ],
+    tests: [{ input: [], expected: [1, 0] }],
+  },
 ];
