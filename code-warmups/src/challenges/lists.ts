@@ -223,4 +223,102 @@ export const listsChallenges: Challenge[] = [
       { input: [[1, 2, 3], [-1]], expected: [1, 2] },
     ],
   },
+  {
+    id: "split-list-in-half-i",
+    title: "Split List in Half I",
+    category: "lists",
+    paramNames: ["nums"],
+    description:
+      "Return the list split into two halves. If the length is odd, the second half contains the extra element.",
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "split_list_in_half",
+        starterCode: `def split_list_in_half(nums: list[int]) -> tuple[list[int], list[int]]:
+    # TODO: implement
+    return [], []
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "splitListInHalf",
+        starterCode: `function splitListInHalf(nums) {
+  // TODO: implement
+  return [];
+}
+`,
+      },
+    ],
+    tests: [
+      {
+        input: [[1, 2, 3, 4]],
+        expected: [
+          [1, 2],
+          [3, 4],
+        ],
+      },
+      { input: [[1, 2, 3]], expected: [[1], [2, 3]] },
+      { input: [[1]], expected: [[], [1]] },
+      { input: [[]], expected: [[], []] },
+      {
+        input: [[9, 8, 7, 6, 5]],
+        expected: [
+          [9, 8],
+          [7, 6, 5],
+        ],
+      },
+    ],
+  },
+  {
+    id: "split-list-in-half-ii",
+    title: "Split List in Half II",
+    category: "lists",
+    paramNames: ["nums"],
+    description:
+      "Return two halves of the list. If the length is odd, split the middle value in half and place one half at the end of the first list and the other at the start of the second list.",
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "split_list_in_half_interpolated",
+        starterCode: `def split_list_in_half_interpolated(nums: list[int]) -> tuple[list[float], list[float]]:
+    # TODO: implement
+    return [], []
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "splitListInHalfInterpolated",
+        starterCode: `function splitListInHalfInterpolated(nums) {
+  // TODO: implement
+  return [];
+}
+`,
+      },
+    ],
+    tests: [
+      {
+        input: [[1, 3, 2]],
+        expected: [
+          [1, 1.5],
+          [1.5, 2],
+        ],
+      },
+      { input: [[5]], expected: [[2.5], [2.5]] },
+      {
+        input: [[1, 2, 3, 4]],
+        expected: [
+          [1, 2],
+          [3, 4],
+        ],
+      },
+      { input: [[]], expected: [[], []] },
+      {
+        input: [[-1, 3, -1]],
+        expected: [
+          [-1, 1.5],
+          [1.5, -1],
+        ],
+      },
+    ],
+  },
 ];
