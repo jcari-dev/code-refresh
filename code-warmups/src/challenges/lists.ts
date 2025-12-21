@@ -1,6 +1,40 @@
 import type { Challenge } from "../types";
 
 export const listsChallenges: Challenge[] = [
+    {
+    id: "return-list-reversed",
+    title: "Return List Reversed",
+    category: "lists",
+    paramNames: ["nums"],
+    description:
+      "Return list reversed. If the list is empty, return an empty list.",
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "return_list_reversed",
+        starterCode: `def return_list_reversed(nums: list[int]) -> list[int]:
+    # TODO: implement
+    return []
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "returnListReversed",
+        starterCode: `function returnListReversed(nums) {
+  // TODO: implement
+  return [];
+}
+`,
+      },
+    ],
+    tests: [
+      { input: [[3, 2, 1]], expected: [1, 2, 3] },
+      { input: [[3, 2, 2]], expected: [2, 2, 3] },
+      { input: [[-1, -3, 2]], expected: [-3, -1, 2] },
+      { input: [[1, 2, 3]], expected: [1, 2, 3] },
+      { input: [[]], expected: [] },
+    ],
+  },
   {
     id: "sort-list-ascending",
     title: "Sort List",
