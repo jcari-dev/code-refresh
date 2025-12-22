@@ -5,24 +5,22 @@ function pickRandomIndex(n: number) {
   return Math.floor(Math.random() * n);
 }
 
-
 export default function MicroTipCard() {
-
   function renderInlineCode(text: string) {
-  return text.split(/(`[^`]+`)/g).map((part, i) => {
-    if (part.startsWith("`") && part.endsWith("`")) {
-      return (
-        <code
-          key={i}
-          className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-xs text-emerald-300"
-        >
-          {part.slice(1, -1)}
-        </code>
-      );
-    }
-    return part;
-  });
-}
+    return text.split(/(`[^`]+`)/g).map((part, i) => {
+      if (part.startsWith("`") && part.endsWith("`")) {
+        return (
+          <code
+            key={i}
+            className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-xs text-emerald-300"
+          >
+            {part.slice(1, -1)}
+          </code>
+        );
+      }
+      return part;
+    });
+  }
 
   const tip = useMemo(() => {
     const idx = pickRandomIndex(MICRO_TIPS.length);
@@ -40,15 +38,11 @@ export default function MicroTipCard() {
         )}
       </div>
 
-<p className="mt-3 text-sm leading-relaxed text-slate-300">
-  {renderInlineCode(tip.text)}
-</p>
-
-
-
-      <p className="mt-3 text-xs text-slate-400">
-        Refresh to roll a new one.
+      <p className="mt-3 text-sm leading-relaxed text-slate-300">
+        {renderInlineCode(tip.text)}
       </p>
+
+      <p className="mt-auto pt-4 text-xs text-slate-400">Refresh to roll a new one.</p>
     </section>
   );
 }
