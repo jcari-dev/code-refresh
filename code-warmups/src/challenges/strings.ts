@@ -433,10 +433,12 @@ export const stringsChallenges: Challenge[] = [
     title: "Remove Diacritics from String",
     category: "strings",
 
-  description:
-    "Remove all diacritic marks from the input string and return the cleaned string.",
-  helpLink: { text: "diacritic", href: "https://en.wikipedia.org/wiki/Diacritic" },
-
+    description:
+      "Remove all diacritic marks from the input string and return the cleaned string.",
+    helpLink: {
+      text: "diacritic",
+      href: "https://en.wikipedia.org/wiki/Diacritic",
+    },
 
     paramNames: ["string"],
     languages: [
@@ -467,6 +469,40 @@ export const stringsChallenges: Challenge[] = [
         input: ["áàâäãå ēéèêë īíìîï ōóòôö ūúùûü çñÿ"],
         expected: "aaaaaa eeeee iiiii ooooo uuuuu cny",
       },
+    ],
+  },
+  {
+    id: "string-to-binary",
+    title: "String to Binary",
+    category: "strings",
+    description:
+      "Convert a string to its binary form using ASCII. Return 8-bit values separated by spaces.",
+    paramNames: ["string"],
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "string_to_binary",
+        starterCode: `def string_to_binary(s: str) -> str:
+    # TODO: convert string to binary
+    return ""
+`,
+      },
+      {
+        id: "javascript",
+        requiredFunction: "stringToBinary",
+        starterCode: `function stringToBinary(s) {
+  // TODO: convert string to binary
+  return "";
+}
+`,
+      },
+    ],
+    tests: [
+      { input: [""], expected: "" },
+      { input: ["A"], expected: "01000001" },
+      { input: ["Hi"], expected: "01001000 01101001" },
+      { input: ["abc"], expected: "01100001 01100010 01100011" },
+      { input: ["!"], expected: "00100001" },
     ],
   },
 ];
