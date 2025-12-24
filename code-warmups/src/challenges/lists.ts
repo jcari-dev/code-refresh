@@ -177,7 +177,7 @@ export const listsChallenges: Challenge[] = [
     category: "lists",
     paramNames: ["nums"],
     description:
-      "Return the most frequent element. If the list is empty return [].",
+      "Return the most frequent element. If the list is empty return []. In case of a tie, return the element that appears first in the list.",
     languages: [
       {
         id: "python",
