@@ -5,7 +5,8 @@ export const stringsChallenges: Challenge[] = [
     id: "capitalize-string",
     title: "Capitalize String",
     category: "strings",
-    description: "Return the string with the first character of each word capitalized.",
+    description:
+      "Return the string with the first character of each word capitalized.",
     paramNames: ["string"],
     languages: [
       {
@@ -173,40 +174,39 @@ export const stringsChallenges: Challenge[] = [
     ],
   },
   {
-  id: "string-encode-no-1",
-  title: "String Encode I (Length)",
-  category: "strings",
-  description:
-    "Return a run-length encoded version of the string by grouping consecutive characters and prefixing them with their count.",
-  paramNames: ["s"],
-  languages: [
-    {
-      id: "python",
-      requiredFunction: "encode_by_length",
-      starterCode: `def encode_by_length(s: str) -> str:
+    id: "string-encode-no-1",
+    title: "String Encode I (Length)",
+    category: "strings",
+    description:
+      "Return a run-length encoded version of the string by grouping consecutive characters and prefixing them with their count.",
+    paramNames: ["s"],
+    languages: [
+      {
+        id: "python",
+        requiredFunction: "encode_by_length",
+        starterCode: `def encode_by_length(s: str) -> str:
     # TODO: implement
     return ""
 `,
-    },
-    {
-      id: "javascript",
-      requiredFunction: "encodeByLength",
-      starterCode: `function encodeByLength(s) {
+      },
+      {
+        id: "javascript",
+        requiredFunction: "encodeByLength",
+        starterCode: `function encodeByLength(s) {
   // TODO: implement
   return "";
 }
 `,
-    },
-  ],
-  tests: [
-    { input: [""], expected: "" },
-    { input: ["a"], expected: "1a" },
-    { input: ["aa"], expected: "2a" },
-    { input: ["aaabbc"], expected: "3a2b1c" },
-    { input: ["abcd"], expected: "1a1b1c1d" },
-  ],
-}
-,
+      },
+    ],
+    tests: [
+      { input: [""], expected: "" },
+      { input: ["a"], expected: "1a" },
+      { input: ["aa"], expected: "2a" },
+      { input: ["aaabbc"], expected: "3a2b1c" },
+      { input: ["abcd"], expected: "1a1b1c1d" },
+    ],
+  },
   {
     id: "remove-all-digits",
     title: "Remove All Digits",

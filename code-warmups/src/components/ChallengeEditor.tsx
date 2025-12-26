@@ -152,7 +152,6 @@ export default function ChallengeEditor({
     setCode(saved ?? activeLang.starterCode);
   }, [key, activeLang.starterCode]);
 
-
   function handleLangChange(id: LanguageId) {
     setActiveLangId(id);
     setOutput("Run the code!");

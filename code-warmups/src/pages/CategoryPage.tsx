@@ -16,7 +16,8 @@ export default function CategoryPage() {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
-  const [completedFilter, setCompletedFilter] = useState<CompletedFilter>("all");
+  const [completedFilter, setCompletedFilter] =
+    useState<CompletedFilter>("all");
 
   const list = challenges.filter((c) => c.category === categoryId);
 
@@ -41,7 +42,8 @@ export default function CategoryPage() {
       // completion filter
       const pyDone =
         localStorage.getItem(`${ch.id}:python:completed`) === "true";
-      const jsDone = localStorage.getItem(`${ch.id}:javascript:completed`) === "true";
+      const jsDone =
+        localStorage.getItem(`${ch.id}:javascript:completed`) === "true";
 
       switch (completedFilter) {
         case "all":
@@ -91,7 +93,9 @@ export default function CategoryPage() {
         />
         <select
           value={completedFilter}
-          onChange={(e) => setCompletedFilter(e.target.value as CompletedFilter)}
+          onChange={(e) =>
+            setCompletedFilter(e.target.value as CompletedFilter)
+          }
           className="w-full sm:w-56 rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm text-slate-100"
         >
           <option value="all">All</option>
@@ -127,7 +131,8 @@ export default function CategoryPage() {
                 <td className="px-4 py-3 text-xs font-medium tracking-wide">
                   <span
                     className={
-                      localStorage.getItem(`${ch.id}:python:completed`) === "true"
+                      localStorage.getItem(`${ch.id}:python:completed`) ===
+                      "true"
                         ? "text-emerald-400"
                         : "text-slate-500"
                     }
@@ -137,7 +142,8 @@ export default function CategoryPage() {
                   <span className="mx-1 text-slate-600">/</span>
                   <span
                     className={
-                      localStorage.getItem(`${ch.id}:javascript:completed`) === "true"
+                      localStorage.getItem(`${ch.id}:javascript:completed`) ===
+                      "true"
                         ? "text-emerald-400"
                         : "text-slate-500"
                     }

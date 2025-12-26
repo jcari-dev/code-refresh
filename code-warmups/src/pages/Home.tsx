@@ -204,7 +204,9 @@ export default function Home() {
                   <div>
                     <div className="text-xs text-slate-400 mb-1">Up next</div>
                     <div className="text-sm font-semibold text-slate-200">
-                      {stats.next?.title ?? stats.next?.id ?? "You’re caught up"}
+                      {stats.next?.title ??
+                        stats.next?.id ??
+                        "You’re caught up"}
                     </div>
                   </div>
                 </div>

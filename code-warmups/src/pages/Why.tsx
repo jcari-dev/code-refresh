@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
-
 export default function Why() {
-
-
   useEffect(() => {
     document.title = "Why this exists - Code Refresh Labs";
   }, []);

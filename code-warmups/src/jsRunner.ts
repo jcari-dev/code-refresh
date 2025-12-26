@@ -1,7 +1,6 @@
 // jsRunner.ts
 import type { Challenge, LanguageConfig } from "./types";
 
-
 /**
  * Runs JS warmups and returns:
  * - result: the human-readable test report (Passed X/Y tests...)
@@ -158,7 +157,8 @@ try {
       };
     }
 
-    const tests: AnyTest[] = (challenge as any).tests ?? (challenge as any).testCases ?? [];
+    const tests: AnyTest[] =
+      (challenge as any).tests ?? (challenge as any).testCases ?? [];
     if (!Array.isArray(tests) || tests.length === 0) {
       return {
         result:
@@ -207,7 +207,10 @@ try {
     const body = lines.length ? "\n" + lines.join("\n\n") + "\n" : "";
     return { result: header + body, console: capture.getText() };
   } catch (e) {
-    return { result: "Runtime error:\n" + String(e), console: capture.getText() };
+    return {
+      result: "Runtime error:\n" + String(e),
+      console: capture.getText(),
+    };
   } finally {
     capture.restore();
   }

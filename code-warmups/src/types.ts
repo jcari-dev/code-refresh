@@ -7,7 +7,7 @@ export interface TestCase {
 }
 
 export interface LanguageConfig {
-  id: LanguageId;           // "python" or "javascript"
+  id: LanguageId; // "python" or "javascript"
   requiredFunction: string; // e.g. "capitalize_string" or "capitalizeString"
   starterCode: string;
 }

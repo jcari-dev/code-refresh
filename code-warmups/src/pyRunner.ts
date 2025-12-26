@@ -21,7 +21,9 @@ export function buildPythonHarness(
   lang: LanguageConfig,
   userCode: string
 ): string {
-  const testsPy = JSON.stringify(challenge.tests.map((t) => [t.input, t.expected]));
+  const testsPy = JSON.stringify(
+    challenge.tests.map((t) => [t.input, t.expected])
+  );
 
   return `
 ${userCode}
@@ -75,7 +77,10 @@ _stderr = io.StringIO()
 _result = ""
 with redirect_stdout(_stdout), redirect_stderr(_stderr):
     try:
-${harness.split("\n").map((l) => "        " + l).join("\n")}
+${harness
+  .split("\n")
+  .map((l) => "        " + l)
+  .join("\n")}
         _result = __run_tests()
     except Exception as e:
         _result = "Runtime error:\\n" + str(e)
