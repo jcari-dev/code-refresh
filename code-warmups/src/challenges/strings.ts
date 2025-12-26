@@ -5,7 +5,7 @@ export const stringsChallenges: Challenge[] = [
     id: "capitalize-string",
     title: "Capitalize String",
     category: "strings",
-    description: "Return the string with only the first character capitalized.",
+    description: "Return the string with the first character of each word capitalized.",
     paramNames: ["string"],
     languages: [
       {
