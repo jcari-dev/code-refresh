@@ -5,14 +5,14 @@ export type Quote = {
 export const QUOTES: Quote[] = [
   // -1-
   { text: "This works out. Your life has a way of doing that." },
-  { text: "You’re moving forward — that’s the real win." },
+  { text: "You’re moving forward, that’s the real win." },
   { text: "It can’t rain forever." },
   { text: "You’re closer than you were not long ago." },
   { text: "This path leads somewhere good." },
   { text: "Nothing here defines your limits." },
   { text: "Progress is already happening, even quietly." },
   { text: "You’re on the right road, even if it bends." },
-  { text: "This is how things improve — one step at a time." },
+  { text: "This is how things improve, one step at a time." },
   { text: "You don’t need to rush. You’re already underway." },
   { text: "Consistency is doing more for you than you realize." },
   { text: "You’re doing fine. Truly." },
@@ -23,7 +23,7 @@ export const QUOTES: Quote[] = [
   { text: "Momentum is quietly on your side." },
   { text: "You’re allowed to trust where this is going." },
   { text: "What you’re building is bigger than today." },
-  { text: "You keep showing up — that’s how this turns out right." },
+  { text: "You keep showing up, that’s how this turns out right." },
   // -2-
   { text: "You’ve absolutely got enough brain for life." },
   { text: "Nothing is on fire. You’re okay." },
